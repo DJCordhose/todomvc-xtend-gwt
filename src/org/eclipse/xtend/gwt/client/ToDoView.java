@@ -1,4 +1,6 @@
-package com.todo.client;
+package org.eclipse.xtend.gwt.client;
+
+import org.eclipse.xtend.gwt.client.ToDoPresenter.ViewEventHandler;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -20,7 +22,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AbstractDataProvider;
-import com.todo.client.ToDoPresenter.ViewEventHandler;
 
 /**
  * A view for the {@link ToDoPresenter}

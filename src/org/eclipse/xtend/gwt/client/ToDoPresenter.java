@@ -1,4 +1,4 @@
-package com.todo.client;
+package org.eclipse.xtend.gwt.client;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -3,15 +3,16 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.json.JSON'/>
-
-  <!-- Don't inherit any GWT styles - they're ugly!               -->
-  <!-- <inherits name='com.google.gwt.user.theme.clean.Clean'/>-->
-
+  
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='com.todo.client.GwtToDo'/>
+  <entry-point class='org.eclipse.xtend.gwt.client.GwtToDo'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
+  <source path='shared'/>
+  
+  <set-property name="user.agent" value="gecko1_8,safari"/>
+  
 </module>

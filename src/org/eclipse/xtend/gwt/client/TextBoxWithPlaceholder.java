@@ -1,4 +1,4 @@
-package com.todo.client;
+package org.eclipse.xtend.gwt.client;
 
 import com.google.gwt.user.client.ui.TextBox;
 
