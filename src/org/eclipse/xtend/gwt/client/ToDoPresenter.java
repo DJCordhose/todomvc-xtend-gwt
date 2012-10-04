@@ -45,14 +45,11 @@ public class ToDoPresenter {
 		void setTaskStatistics(int totalTasks, int completedTasks);
 
 		/**
-		 * Sets the data provider that acts as a source of {@link Todo} instances.
-		 */
-		void setDataProvider(AbstractDataProvider<Todo> data);
-
-		/**
 		 * Adds the handler to the events raised by the view.
 		 */
 		void addhandler(ViewEventHandler handler);
+
+		void updateView(List<Todo> list);
 	}
 
 	/**
@@ -64,6 +61,8 @@ public class ToDoPresenter {
 		 * Invoked when a user deletes a new task.
 		 */
 		void deleteTask(Todo todo);
+		
+		void updateTask(Todo todo);
 		
 		/**
 		 * Invoked when a user adds a new task.
@@ -104,9 +103,14 @@ public class ToDoPresenter {
 		public void deleteTask(Todo toDoItem) {
 			ToDoPresenter.this.deleteTask(toDoItem);
 		}
+
+		@Override
+		public void updateTask(Todo todo) {
+			ToDoPresenter.this.updateTask(todo);
+		}
 	};
 
-	private final ListDataProvider<Todo> todos = new ListDataProvider<Todo>();
+	private List<Todo> todos = new ArrayList<Todo>();
 
 	private final View view;
 
@@ -121,10 +125,10 @@ public class ToDoPresenter {
 	 * Computes the tasks statistics and updates the view.
 	 */
 	private void updateTaskStatistics() {
-		int totalTasks = todos.getList().size();
+		int totalTasks = todos.size();
 
 		int completeTask = 0;
-		for (Todo task : todos.getList()) {
+		for (Todo task : todos) {
 			if (task.isDone()) {
 				completeTask++;
 			}
@@ -137,7 +141,7 @@ public class ToDoPresenter {
 	 * Deletes the given task and updates statistics.
 	 */
 	protected void deleteTask(Todo toDoItem) {
-		todos.getList().remove(toDoItem);
+		todos.remove(toDoItem);
 		updateTaskStatistics();
 		saveState();
 	}
@@ -148,7 +152,7 @@ public class ToDoPresenter {
 	protected void updateTask(Todo toDoItem) {
 		// if the item has become empty, remove it
 		if (toDoItem.getTitle().trim().equals("")) {
-			todos.getList().remove(toDoItem);
+			todos.remove(toDoItem);
 		}
 
 		updateTaskStatistics();
@@ -160,15 +164,9 @@ public class ToDoPresenter {
 	 */
 	private void markAllCompleted(boolean completed) {
 		// update the completed state of each item
-		for (Todo task : todos.getList()) {
+		for (Todo task : todos) {
 			task.setDone(completed);
 		}
-
-		// cause the view to refresh the whole list - yes, this is a bit ugly!
-		List<Todo> items = new ArrayList<Todo>(todos.getList());
-		todos.getList().clear();
-		todos.getList().addAll(items);
-
 		updateTaskStatistics();
 		saveState();
 	}
@@ -185,7 +183,7 @@ public class ToDoPresenter {
 
 		Todo toDoItem = new Todo(taskTitle);
 		view.clearTaskText();
-		todos.getList().add(toDoItem);
+		todos.add(toDoItem);
 		updateTaskStatistics();
 		saveState();
 	}
@@ -194,7 +192,7 @@ public class ToDoPresenter {
 	 * Clears completed tasks and updates the view.
 	 */
 	private void clearCompletedTasks() {
-		Iterator<Todo> iterator = todos.getList().iterator();
+		Iterator<Todo> iterator = todos.iterator();
 		while (iterator.hasNext()) {
 			Todo item = iterator.next();
 			if (item.isDone()) {
@@ -210,10 +208,11 @@ public class ToDoPresenter {
 	 */
 	private void saveState() {
 		String name = getCurrentName();
-		service.save(name, new ArrayList<Todo>(todos.getList()), new AsyncCallback<Void>() {
+		service.save(name, new ArrayList<Todo>(todos), new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
+				updateView(todos);
 			}
 			
 			@Override
@@ -229,9 +228,9 @@ public class ToDoPresenter {
 			
 			@Override
 			public void onSuccess(List<Todo> result) {
-				todos.setList(result);
-				view.setDataProvider(todos);
+				todos = result;
 				updateTaskStatistics();
+				updateView(result);
 			}
 			
 			@Override
@@ -245,5 +244,11 @@ public class ToDoPresenter {
 	private String getCurrentName() {
 		return "dummy";
 	}
+	
+
+	private void updateView(List<Todo> list) {
+		view.updateView(list);
+	}
+
 
 }

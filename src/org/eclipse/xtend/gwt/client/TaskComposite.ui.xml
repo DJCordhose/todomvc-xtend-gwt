@@ -1,0 +1,15 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:cv="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:todo="urn:import:org.eclipse.xtend.gwt.client">
+	<g:HTMLPanel>
+	    <li ui:field="li">
+		    <g:FlowPanel styleName="view">
+			    <g:CheckBox ui:field="checkBox" styleName="toggle"></g:CheckBox>
+			    <g:Label ui:field="label"></g:Label>
+			    <g:Button ui:field="removeButton" styleName='destroy'></g:Button>
+		    </g:FlowPanel>
+			<g:TextBox ui:field="textBox" styleName='edit'></g:TextBox>
+		</li>
+	</g:HTMLPanel>
+</ui:UiBinder>

@@ -15,7 +15,7 @@ public class Todo implements Serializable {
 		this.title = title;
 		this.done = false;
 	}
-
+	
 	public boolean isDone() {
 		return this.done;
 	}

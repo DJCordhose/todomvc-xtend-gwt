@@ -1,5 +1,7 @@
 package org.eclipse.xtend.gwt.client;
 
+import java.util.List;
+
 import org.eclipse.xtend.gwt.client.ToDoPresenter.ViewEventHandler;
 import org.eclipse.xtend.gwt.shared.Todo;
 
@@ -14,15 +16,13 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.CellList;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AbstractDataProvider;
 
 /**
  * A view for the {@link ToDoPresenter}
@@ -60,8 +60,10 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	InputElement toggleAll;
 
 	@UiField(provided = true)
-	CellList<Todo> todoTable;
+	FlowPanel todoPanel;
 
+	private ViewEventHandler viewHandler;
+	
 	public ToDoView() {
 	}
 
@@ -72,11 +74,8 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 
 	@Override
 	public void addhandler(final ViewEventHandler handler) {
-		todoTable = new CellList<Todo>(new ToDoCell(handler));;
-		
-		// removes the yellow highlight
-		todoTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
-
+		this.viewHandler = handler;
+		todoPanel = new FlowPanel();
 		initWidget(uiBinder.createAndBindUi(this));
 
 		// add IDs to the elements that have ui:field attributes. This is required because the UiBinder
@@ -123,8 +122,12 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	}
 
 	@Override
-	public void setDataProvider(AbstractDataProvider<Todo> data) {
-		data.addDataDisplay(todoTable);
+	public void updateView(List<Todo> list) {
+		todoPanel.clear();
+		for (Todo todo : list) {
+			TaskComposite taskComposite = new TaskComposite(todo, viewHandler);
+			todoPanel.add(taskComposite);
+		}
 	}
 
 	@Override
