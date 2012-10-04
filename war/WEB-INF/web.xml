@@ -4,7 +4,15 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<!-- TODO: Add <servlet> tags for each servlet here. -->
-	<!-- TODO: Add <servlet-mapping> tags for each <servlet> here. -->
-	<!-- TODO: Optionally add a <welcome-file-list> tag to display a welcome file. -->
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>TodoService</servlet-name>
+    <servlet-class>org.eclipse.xtend.gwt.server.TodoServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>TodoService</servlet-name>
+    <url-pattern>/gwttodo/todoService</url-pattern>
+  </servlet-mapping>
 </web-app>

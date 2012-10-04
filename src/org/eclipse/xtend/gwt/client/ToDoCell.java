@@ -2,6 +2,10 @@ package org.eclipse.xtend.gwt.client;
 
 import java.util.Date;
 
+import org.eclipse.xtend.gwt.client.ToDoPresenter.ViewEventHandler;
+import org.eclipse.xtend.gwt.shared.Todo;
+
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
@@ -17,14 +21,14 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
 /**
- * A cell that renders {@link ToDoItem} instances. This cell is rendered in both view and edit modes
+ * A cell that renders {@link Todo} instances. This cell is rendered in both view and edit modes
  * based on user interaction. In edit mode, browser events are handled in order to update the model
  * item state.
  *
  * @author ceberhardt
  *
  */
-public class ToDoCell extends AbstractCell<ToDoItem> {
+public class ToDoCell extends AbstractCell<Todo> {
 
 	/**
 	 * The HTML templates used to render the cell.
@@ -62,19 +66,22 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * The item that is currently being edited
 	 */
-	private ToDoItem editingItem = null;
+	private Todo editingItem = null;
 
 	/**
 	 * A flag that indicates that we are starting to edit the cell
 	 */
 	private boolean beginningEdit = false;
 
-	public ToDoCell() {
+	private ViewEventHandler viewHandler;
+	
+	public ToDoCell(ViewEventHandler viewHandler) {
 		super("click", "keyup", "blur", "dblclick");
+		this.viewHandler = viewHandler;
 	}
 
 	@Override
-	public void render(Context context, ToDoItem value, SafeHtmlBuilder sb) {
+	public void render(Context context, Todo value, SafeHtmlBuilder sb) {
 		// render the cell in edit or view mode
 		if (isEditing(value)) {
 			SafeHtml rendered = templates.edit(value.getTitle());
@@ -96,13 +103,13 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	}
 
 	@Override
-	public boolean isEditing(Context context, Element parent, ToDoItem value) {
+	public boolean isEditing(Context context, Element parent, Todo value) {
 		return isEditing(value);
 	}
 
 	@Override
-	public void onBrowserEvent(Context context, Element parent, ToDoItem value, NativeEvent event,
-			ValueUpdater<ToDoItem> valueUpdater) {
+	public void onBrowserEvent(Context context, Element parent, Todo value, NativeEvent event,
+			ValueUpdater<Todo> valueUpdater) {
 
 		String type = event.getType();
 
@@ -165,7 +172,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 
 				} else if (tagName.equals("BUTTON")) {
 					// if the delete anchor was clicked - delete the item
-					value.delete();
+					viewHandler.deleteTask(value);
 				}
 			}
 		}
@@ -175,7 +182,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * Commits the changes in text value to the ToDoItem
 	 */
-	private void commitEdit(Element parent, ToDoItem value) {
+	private void commitEdit(Element parent, Todo value) {
 		InputElement input = getInputElement(parent);
 		value.setTitle(input.getValue());
 	}
@@ -183,7 +190,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * Begins editing the given item, rendering the cell in edit mode
 	 */
-	private void beginEdit(Context context, Element parent, ToDoItem value) {
+	private void beginEdit(Context context, Element parent, Todo value) {
 		editingItem = value;
 		renderCell(context, parent, value);
 	}
@@ -191,7 +198,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * Ends editing the given item, rendering the cell in view mode
 	 */
-	private void endEdit(Context context, Element parent, ToDoItem value) {
+	private void endEdit(Context context, Element parent, Todo value) {
 		editingItem = null;
 		renderCell(context, parent, value);
 	}
@@ -199,7 +206,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * Renders the cell, replacing the contents of the parent with the newly rendered content.
 	 */
-	private void renderCell(Context context, Element parent, ToDoItem value) {
+	private void renderCell(Context context, Element parent, Todo value) {
 		SafeHtmlBuilder sb = new SafeHtmlBuilder();
 		render(context, value, sb);
 		parent.setInnerHTML(sb.toSafeHtml().asString());
@@ -208,7 +215,7 @@ public class ToDoCell extends AbstractCell<ToDoItem> {
 	/**
 	 * Gets whether the given item is being edited.
 	 */
-	private boolean isEditing(ToDoItem item) {
+	private boolean isEditing(Todo item) {
 		return editingItem == item;
 	}
 

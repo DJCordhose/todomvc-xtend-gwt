@@ -1,6 +1,7 @@
 package org.eclipse.xtend.gwt.client;
 
 import org.eclipse.xtend.gwt.client.ToDoPresenter.ViewEventHandler;
+import org.eclipse.xtend.gwt.shared.Todo;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -59,22 +60,9 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	InputElement toggleAll;
 
 	@UiField(provided = true)
-	CellList<ToDoItem> todoTable = new CellList<ToDoItem>(new ToDoCell());
+	CellList<Todo> todoTable;
 
 	public ToDoView() {
-		initWidget(uiBinder.createAndBindUi(this));
-
-		// removes the yellow highlight
-		todoTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
-
-		// add IDs to the elements that have ui:field attributes. This is required because the UiBinder
-		// does not permit the addition of ID attributes to elements marked with ui:field.
-		// *SIGH*
-		mainSection.setId("main");
-		clearCompleted.getElement().setId("clear-completed");
-		taskText.getElement().setId("new-todo");
-		todoStatsContainer.setId("footer");
-		toggleAll.setId("toggle-all");
 	}
 
 	@Override
@@ -84,6 +72,21 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 
 	@Override
 	public void addhandler(final ViewEventHandler handler) {
+		todoTable = new CellList<Todo>(new ToDoCell(handler));;
+		
+		// removes the yellow highlight
+		todoTable.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.DISABLED);
+
+		initWidget(uiBinder.createAndBindUi(this));
+
+		// add IDs to the elements that have ui:field attributes. This is required because the UiBinder
+		// does not permit the addition of ID attributes to elements marked with ui:field.
+		// *SIGH*
+		mainSection.setId("main");
+		clearCompleted.getElement().setId("clear-completed");
+		taskText.getElement().setId("new-todo");
+		todoStatsContainer.setId("footer");
+		toggleAll.setId("toggle-all");
 
 		// wire-up the events from the UI to the presenter.
 
@@ -120,7 +123,7 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	}
 
 	@Override
-	public void setDataProvider(AbstractDataProvider<ToDoItem> data) {
+	public void setDataProvider(AbstractDataProvider<Todo> data) {
 		data.addDataDisplay(todoTable);
 	}
 
