@@ -15,3 +15,14 @@
 	color: #a9a9a9;
 	text-decoration: line-through;
 }
+
+#todo-list li .toggle:after {
+	display: none;
+}
+
+#todo-list * li {
+	position: relative;
+	font-size: 24px;
+	border-bottom: 1px dotted #ccc !important;
+}
+

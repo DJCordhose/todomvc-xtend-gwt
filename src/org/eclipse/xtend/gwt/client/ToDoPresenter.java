@@ -10,8 +10,6 @@ import org.eclipse.xtend.gwt.shared.TodoServiceAsync;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.view.client.AbstractDataProvider;
-import com.google.gwt.view.client.ListDataProvider;
 
 /**
  * The presenter for the ToDo application. This class is responsible for the lifecycle of the
@@ -249,6 +247,5 @@ public class ToDoPresenter {
 	private void updateView(List<Todo> list) {
 		view.updateView(list);
 	}
-
 
 }
