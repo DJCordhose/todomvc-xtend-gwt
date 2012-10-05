@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.xtend.gwt.client.ToDoView.ViewEventHandler;
 import org.eclipse.xtend.gwt.shared.Todo;
 import org.eclipse.xtend.gwt.shared.TodoService;
 import org.eclipse.xtend.gwt.shared.TodoServiceAsync;
