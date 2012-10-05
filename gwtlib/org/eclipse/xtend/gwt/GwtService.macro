@@ -46,7 +46,15 @@ import com.google.gwt.user.client.rpc.RemoteService
 		  for (m : members.filter(typeof(XtendFunction))) {
 		    method (m.name, type(Void::TYPE)) [
 		      m.parameters.forEach [ param(name, parameterType) ]
-		      param('result', type( typeof(AsyncCallback), m.returnType))
+		      val type = switch m.returnType.simpleName {
+		      	case 'void' : <Void>type
+		      	case 'boolean' : <Boolean>type
+		      	case 'int' : <Integer>type
+		      	case 'long' : <Long>type
+		      	// ...
+		      	default : m.returnType
+		      }
+		      param('result', type( typeof(AsyncCallback), type))
 		    ]
 		  }
 		]
