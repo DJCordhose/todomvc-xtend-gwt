@@ -9,7 +9,7 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo;
 import org.eclipse.xtend.gwt.todomvc.shared.TodoService;
 import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync;
 
-import com.google.gwt.core.shared.GWT;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

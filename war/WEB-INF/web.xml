@@ -3,7 +3,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>TodoService</servlet-name>
-    <servlet-class>org.eclipse.xtend.gwt.server.TodoServiceImpl</servlet-class>
+    <servlet-class>org.eclipse.xtend.gwt.todomvc.server.TodoServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
