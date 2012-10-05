@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='gwttodo'>
+  <inherits name='com.google.gwt.user.User'/>
+  <!-- Other module inherits                                      -->
+  <inherits name='org.eclipse.xtext.GwtLib'/>
+  
+  <entry-point class='org.eclipse.xtend.gwt.client.GwtToDo'/>
+  <source path='client'/>
+  <source path='shared'/>
+  <set-property name="user.agent" value="gecko1_8,safari"/>
+  <add-linker name="xsiframe"/>
+  <set-configuration-property name="devModeRedirectEnabled" value="true"/>
+</module>

@@ -1,0 +1,97 @@
+package org.eclipse.xtend.gwt
+
+import com.google.gwt.user.client.rpc.AsyncCallback
+import org.eclipse.xtend.core.xtend.XtendClass
+import org.eclipse.xtend.core.xtend.XtendFunction
+import org.eclipse.xtend.core.xtend.XtendFile
+
+import static extension org.eclipse.xtend.gwt.Names.*
+import com.google.gwt.user.server.rpc.RemoteServiceServlet
+import org.eclipse.xtext.common.types.TypesFactory
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath
+import org.eclipse.xtext.common.types.JvmAnnotationType
+import com.google.gwt.user.client.rpc.RemoteService
+
+/**
+ * Active annotation, which transforms a class into a GWT service.
+ * It automatically derives the needed interfaces and keeps them in sync.
+ */
+@GwtService for class {
+	
+  static String value = 'UNDEFINED'
+
+  register {
+  	elements.forEach [
+	  	registerInterface(interfaceName)
+		registerInterface(interfaceAsyncName)
+  	]
+  }
+
+  process {
+  	elements.forEach [
+  		
+  		if (!name.endsWith("Impl")) {
+  			error("The name must end with 'Impl'")
+  		}
+  		
+  		if (!packageName.contains(".server")) {
+  			error("A service must reside under the 'server' package.")
+  		}
+  		
+  		if (^extends != null) {
+  			error("A service must not extend another class.")
+  		}
+  		
+		with(interfaceAsyncName) [ asyncInterface |
+		  for (m : members.filter(typeof(XtendFunction))) {
+		    method (m.name, type(Void::TYPE)) [
+		      m.parameters.forEach [ param(name, parameterType) ]
+		      param('result', type( typeof(AsyncCallback), m.returnType))
+		    ]
+		  }
+		]
+		
+		with(interfaceName) [ interface |
+			interface.superTypes += <RemoteService>type
+			interface.annotations += TypesFactory::eINSTANCE.createJvmAnnotationReference => [ annoRef |
+				annoRef.annotation = <RemoteServiceRelativePath>type.type as JvmAnnotationType
+				val annoValue = TypesFactory::eINSTANCE?.createJvmStringAnnotationValue
+				annoRef.values += annoValue
+				annoValue.values += servletPath(null)
+			]
+			for (m : members.filter(typeof(XtendFunction))) {
+				method (m.name, m.returnType) [
+			    	m.parameters.forEach [ param(name, parameterType) ]
+			  	]
+			}
+			with(packageName + "." + name) [ mainType |
+				mainType.superTypes += <RemoteServiceServlet>type
+				mainType.superTypes += type(interface)
+			]
+		]
+  	]
+  }
+}
+
+class Names {
+	
+	def static String servletPath(XtendClass clazz, String value) {
+		if (value != null && value != 'UNDEFINED') {
+			return value
+		}
+		return clazz.name.toFirstLower.substring(0, clazz.name.length - 4)
+	}
+	
+	def static String packageName(XtendClass clazz) {
+		val file = clazz.eResource.contents.head as XtendFile
+		return file.getPackage
+	}
+	
+	def static interfaceName(XtendClass it) {
+		packageName(it).replace('server', 'shared') + "." + name.substring(0, name.length - 4)
+	}
+	
+	def static interfaceAsyncName(XtendClass it) {
+		packageName(it).replace('server', 'shared') + "." + name.substring(0, name.length - 4) + 'Async'
+	}
+}

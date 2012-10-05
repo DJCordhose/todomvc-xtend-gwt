@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="xtend-gen"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gwtlib"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/guava-gwt-13.0.jar"/>
+	<classpathentry kind="lib" path="lib/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib.gwt_2.4.0.v201208201126.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib.gwt_2.4.0.v201208201126.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.emf.common_2.9.0.v20120919-0345.jar" sourcepath=".xtendMacroDependencies/org.eclipse.emf.common.source_2.9.0.v20120919-0345.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.emf.ecore_2.9.0.v20120919-0345.jar" sourcepath=".xtendMacroDependencies/org.eclipse.emf.ecore.source_2.9.0.v20120919-0345.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.xtend.core_2.4.0.v201210011825.jar" sourcepath=".xtendMacroDependencies/org.eclipse.xtend.core.source_2.4.0.v201210011825.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.xtend.macro_2.4.0.v201210011825.jar" sourcepath=".xtendMacroDependencies/org.eclipse.xtend.macro.source_2.4.0.v201210011825.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.xtext.common.types_2.4.0.v201210011825.jar" sourcepath=".xtendMacroDependencies/org.eclipse.xtext.common.types.source_2.4.0.v201210011825.jar"/>
+	<classpathentry kind="lib" path=".xtendMacroDependencies/org.eclipse.xtext.xbase_2.4.0.v201210011825.jar" sourcepath=".xtendMacroDependencies/org.eclipse.xtext.xbase.source_2.4.0.v201210011825.jar"/>
+	<classpathentry kind="lib" path="lib/guava-13.0.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib_2.4.0.v201208201126.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib_2.4.0.v201208201126.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
