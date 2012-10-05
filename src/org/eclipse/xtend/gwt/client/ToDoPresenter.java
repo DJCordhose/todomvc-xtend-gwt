@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.xtend.gwt.client.ToDoView.ViewEventHandler;
 import org.eclipse.xtend.gwt.shared.Todo;
 import org.eclipse.xtend.gwt.shared.TodoService;
 import org.eclipse.xtend.gwt.shared.TodoServiceAsync;
@@ -18,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * @author ceberhardt
  *
  */
-public class ToDoPresenter {
+public class ToDoPresenter implements ViewEventHandler {
 	
 	private TodoServiceAsync service = GWT.create(TodoService.class);
 
@@ -49,72 +50,14 @@ public class ToDoPresenter {
 
 		void updateView(List<Todo> list);
 	}
-
-	/**
-	 * The interface that handles interactions from the view.
-	 *
-	 */
-	public interface ViewEventHandler {
-		/**
-		 * Invoked when a user deletes a new task.
-		 */
-		void deleteTask(Todo todo);
-		
-		void updateTask(Todo todo);
-		
-		/**
-		 * Invoked when a user adds a new task.
-		 */
-		void addTask();
-
-		/**
-		 * Invoked when a user wishes to clear completed tasks.
-		 */
-		void clearCompletedTasks();
-
-		/**
-		 * Sets the completed state of all tasks to the given state
-		 */
-		void markAllCompleted(boolean completed);
-	}
-
-	/**
-	 * Handler for view events, defers to private presenter methods.
-	 */
-	private final ViewEventHandler viewHandler = new ViewEventHandler() {
-		@Override
-		public void addTask() {
-			ToDoPresenter.this.addTask();
-		}
-
-		@Override
-		public void clearCompletedTasks() {
-			ToDoPresenter.this.clearCompletedTasks();
-		}
-
-		@Override
-		public void markAllCompleted(boolean completed) {
-			ToDoPresenter.this.markAllCompleted(completed);
-		}
-
-		@Override
-		public void deleteTask(Todo toDoItem) {
-			ToDoPresenter.this.deleteTask(toDoItem);
-		}
-
-		@Override
-		public void updateTask(Todo todo) {
-			ToDoPresenter.this.updateTask(todo);
-		}
-	};
-
+	
 	private List<Todo> todos = new ArrayList<Todo>();
 
 	private final View view;
 
 	public ToDoPresenter(View view) {
 		this.view = view;
-		view.addhandler(viewHandler);
+		view.addhandler(this);
 
 		loadState();
 	}
@@ -138,7 +81,7 @@ public class ToDoPresenter {
 	/**
 	 * Deletes the given task and updates statistics.
 	 */
-	protected void deleteTask(Todo toDoItem) {
+	public void deleteTask(Todo toDoItem) {
 		todos.remove(toDoItem);
 		updateTaskStatistics();
 		saveState();
@@ -147,7 +90,7 @@ public class ToDoPresenter {
 	/**
 	 * Invoked by a task when its state changes so that we can update the view statistics and persist.
 	 */
-	protected void updateTask(Todo toDoItem) {
+	public void updateTask(Todo toDoItem) {
 		// if the item has become empty, remove it
 		if (toDoItem.getTitle().trim().equals("")) {
 			todos.remove(toDoItem);
@@ -160,7 +103,7 @@ public class ToDoPresenter {
 	/**
 	 * Sets the completed state of all tasks
 	 */
-	private void markAllCompleted(boolean completed) {
+	public void markAllCompleted(boolean completed) {
 		// update the completed state of each item
 		for (Todo task : todos) {
 			task.setDone(completed);
@@ -172,7 +115,7 @@ public class ToDoPresenter {
 	/**
 	 * Adds a new task based on the user input field
 	 */
-	private void addTask() {
+	public void addTask() {
 		String taskTitle = view.getTaskText().trim();
 
 		// if white-space only, do not add a todo
@@ -189,7 +132,7 @@ public class ToDoPresenter {
 	/**
 	 * Clears completed tasks and updates the view.
 	 */
-	private void clearCompletedTasks() {
+	public void clearCompletedTasks() {
 		Iterator<Todo> iterator = todos.iterator();
 		while (iterator.hasNext()) {
 			Todo item = iterator.next();

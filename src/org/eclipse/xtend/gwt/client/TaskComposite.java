@@ -1,6 +1,6 @@
 package org.eclipse.xtend.gwt.client;
 
-import org.eclipse.xtend.gwt.client.ToDoPresenter.ViewEventHandler;
+import org.eclipse.xtend.gwt.client.ToDoView.ViewEventHandler;
 import org.eclipse.xtend.gwt.shared.Todo;
 
 import com.google.gwt.core.client.GWT;
