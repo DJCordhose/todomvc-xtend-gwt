@@ -154,7 +154,6 @@ public class ToDoView extends Composite implements View {
 	public void updateView(List<Todo> list) {
 		todoPanel.clear();
 		for (Todo todo : list) {
-//			TaskComposite taskComposite = new TaskComposite(todo, viewHandler);
 			TodoComposite taskComposite = new TodoComposite(todo, viewHandler);
 			todoPanel.add(taskComposite);
 		}

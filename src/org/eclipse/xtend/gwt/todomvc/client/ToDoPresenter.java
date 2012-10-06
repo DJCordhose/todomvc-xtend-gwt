@@ -27,8 +27,11 @@ public class ToDoPresenter implements ViewEventHandler {
 
 	private final View view;
 
-	public ToDoPresenter(View view) {
+	private String currentName;
+
+	public ToDoPresenter(View view, String currentName) {
 		this.view = view;
+		this.currentName = currentName;
 		view.addhandler(this);
 
 		loadState();
@@ -154,11 +157,9 @@ public class ToDoPresenter implements ViewEventHandler {
 		});
 	}
 
-	// TODO
 	private String getCurrentName() {
-		return "dummy";
+		return currentName;
 	}
-	
 
 	private void updateView(List<Todo> list) {
 		view.updateView(list);
