@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.HTMLPanel
 import com.google.gwt.user.client.ui.Label
 import com.google.gwt.user.client.ui.TextBox
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
-import org.eclipse.xtend.gwt.todomvc.client.ToDoView$ViewEventHandler
+import org.eclipse.xtend.gwt.todomvc.client.ViewEventHandler
 import com.google.gwt.event.dom.client.KeyCodes
 
 import static extension org.eclipse.xtend.gwt.ui.UiBuilder.*

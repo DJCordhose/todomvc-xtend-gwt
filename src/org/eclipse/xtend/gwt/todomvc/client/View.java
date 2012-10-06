@@ -2,7 +2,6 @@ package org.eclipse.xtend.gwt.todomvc.client;
 
 import java.util.List;
 
-import org.eclipse.xtend.gwt.todomvc.client.ToDoView.ViewEventHandler;
 import org.eclipse.xtend.gwt.todomvc.shared.Todo;
 
 /**
