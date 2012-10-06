@@ -58,7 +58,7 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	@UiField
 	InputElement toggleAll;
 
-	@UiField(provided = true)
+	@UiField
 	FlowPanel todoPanel;
 
 	private ViewEventHandler viewHandler;
@@ -74,7 +74,6 @@ public class ToDoView extends Composite implements ToDoPresenter.View {
 	@Override
 	public void addhandler(final ViewEventHandler handler) {
 		this.viewHandler = handler;
-		todoPanel = new FlowPanel();
 		initWidget(uiBinder.createAndBindUi(this));
 
 		// add IDs to the elements that have ui:field attributes. This is required because the UiBinder
