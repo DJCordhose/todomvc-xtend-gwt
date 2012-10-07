@@ -10,65 +10,85 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.ui.WithUiBinding
 
 @WithUiBinding
-class ToDoView extends Composite implements View {
-	
-	ViewEventHandler viewHandler
-	
-	override addhandler(ViewEventHandler handler) {
-		this.viewHandler = handler
+class ToDoView extends Composite {
+
+	new() {
 		initWidget(uiBinder.createAndBindUi(this))
 		
-		mainSection.setId("main");
-		clearCompleted.getElement().setId("clear-completed");
-		taskText.getElement().setId("new-todo");
-		todoStatsContainer.setId("footer");
-		toggleAll.setId("toggle-all");
-		
-		taskText.addKeyUpHandler [
+		// set stuff which can't be set in XML
+		mainSection.id = 'main'
+		clearCompleted.element.id = 'clear-completed'
+		todoText.element.id = 'new-todo'
+		todoText.element.setAttribute("placeholder", "What needs to be done?")
+		todoStatsContainer.id = 'footer'
+		toggleAll.id = 'toggle-all'
+	}
+	
+	(Todo)=>void updateTodo
+	
+	def onUpdateTodo((Todo)=>void updateTodo) {
+		this.updateTodo = updateTodo
+	}
+	
+	(Todo)=>void deleteTodo
+	
+	def onDeleteTodo((Todo)=>void deleteTodo) {
+		this.deleteTodo = deleteTodo
+	}
+	
+	def onAddTodo((Void)=>void callback) {
+		todoText.addKeyUpHandler [
 			if (nativeKeyCode == KeyCodes::KEY_ENTER)
-				handler.addTask
+				callback.apply(null)
 		]
+	}
 
+	def onClearCompletedTodos((Void)=>void callback) {
 		clearCompleted.addClickHandler [
-			handler.clearCompletedTasks
+			callback.apply(null)
 		]
-		
+	}
+
+	def onMarkAllCompleted((Boolean)=>void handler) {
 		val com.google.gwt.user.client.Element clientToggleElement = toggleAll.cast
 		DOM::sinkEvents(clientToggleElement, Event::ONCLICK)
 		DOM::setEventListener(clientToggleElement) [
-			handler.markAllCompleted(toggleAll.isChecked)
+			handler.apply(toggleAll.isChecked)
 		] 
 	}
 	
-	override clearTaskText() {
-		taskText.text = ''
+	def clearTodoText() {
+		todoText.text = ''
 	}
 	
-	override getTaskText() {
-		taskText.text
+	def getTodoText() {
+		val result = todoText.text?.trim
+		if (result == null || result == '')
+			return null
+		return result
 	}
 	
-	override updateView(List<Todo> list) {
+	def updateView(List<Todo> list) {
 		todoPanel.clear
-		for (Todo todo : list) {
-			val taskComposite = new TodoComposite(todo, viewHandler)
-			todoPanel.add(taskComposite)
+		for (Todo todo : list.reverseView) {
+			val todoComposite = new TodoComposite(todo, updateTodo, deleteTodo)
+			todoPanel.add(todoComposite)
 		}
 	}
 	
-	override setTaskStatistics(int totalTasks, int completedTasks) {
-		val remainingTasks = totalTasks - completedTasks
+	def setTodoStatistics(int totalTodos, int completedTodos) {
+		val remainingTodos = totalTodos - completedTodos
 
-		hideElement(mainSection, totalTasks == 0)
-		hideElement(todoStatsContainer, totalTasks == 0)
-		hideElement(clearCompleted.element, completedTasks == 0)
+		hideElement(mainSection, totalTodos == 0)
+		hideElement(todoStatsContainer, totalTodos == 0)
+		hideElement(clearCompleted.element, completedTodos == 0)
 
-		remainingTasksCount.innerText = remainingTasks.toString
-		remainingTasksLabel.innerText = 
-			if (remainingTasks > 1 || remainingTasks == 0) "items" else "item"
-		clearTasksCount.innerHTML = completedTasks.toString
+		remainingTodosCount.innerText = remainingTodos.toString
+		remainingTodosLabel.innerText = 
+			if (remainingTodos > 1 || remainingTodos == 0) "items" else "item"
+		clearTodosCount.innerHTML = completedTodos.toString
 
-		toggleAll.checked = totalTasks == completedTasks
+		toggleAll.checked = totalTodos == completedTodos
 	}
 	
 	def private void hideElement(Element element, boolean hide) {
@@ -78,6 +98,5 @@ class ToDoView extends Composite implements View {
 			element.setAttribute("style", "display:block;");
 		}
 	}
-	
 	
 }

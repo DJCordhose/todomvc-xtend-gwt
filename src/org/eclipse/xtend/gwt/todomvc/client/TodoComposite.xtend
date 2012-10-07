@@ -1,6 +1,5 @@
 package org.eclipse.xtend.gwt.todomvc.client
 
-import com.google.gwt.event.dom.client.KeyCodes
 import com.google.gwt.user.client.ui.CheckBox
 import com.google.gwt.user.client.ui.Composite
 import com.google.gwt.user.client.ui.HTMLPanel
@@ -9,6 +8,7 @@ import com.google.gwt.user.client.ui.TextBox
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 
 import static extension org.eclipse.xtend.gwt.ui.UiBuilder.*
+import static com.google.gwt.event.dom.client.KeyCodes.*
 
 class TodoComposite extends Composite {
 	
@@ -18,11 +18,13 @@ class TodoComposite extends Composite {
 	Label label
 	
 	Todo todo
-	ViewEventHandler viewHandler
+	(Todo)=>void updateTodo
+	(Todo)=>void deleteTodo
 	
-	new(Todo todo, ViewEventHandler viewHandler) {
+	new(Todo todo, (Todo)=>void updateTodo, (Todo)=>void deleteTodo) {
 		this.todo = todo
-		this.viewHandler = viewHandler
+		this.updateTodo = updateTodo
+		this.deleteTodo = deleteTodo
 		initWidget(createWidget())
 		updateView()
 	}
@@ -34,18 +36,18 @@ class TodoComposite extends Composite {
 				onBlur [
 					todo.title = textBox.value
 					viewMode
-					viewHandler.updateTask(todo)
+					updateTodo.apply(todo)
 				]
 				onKeyPress [
 					switch nativeEvent.keyCode {
-						case KeyCodes::KEY_ENTER : {
+						case KEY_ENTER : {
 							todo.title = textBox.value
 							viewMode
-							viewHandler.updateTask(todo)
+							updateTodo.apply(todo)
 						}
-						case KeyCodes::KEY_ESCAPE : {
+						case KEY_ESCAPE : {
 							viewMode
-							viewHandler.updateTask(todo)
+							updateTodo.apply(todo)
 						}
 					}
 				]
@@ -57,7 +59,7 @@ class TodoComposite extends Composite {
 					onClick [
 						todo.done = !todo.done
 						updateView
-						viewHandler.updateTask(todo)
+						updateTodo.apply(todo)
 					]
 				]
 				label = label [
@@ -68,7 +70,7 @@ class TodoComposite extends Composite {
 				button [
 					styleName = 'destroy'
 					onClick [
-						viewHandler.deleteTask(todo)
+						deleteTodo.apply(todo)
 					]
 				]
 			]
