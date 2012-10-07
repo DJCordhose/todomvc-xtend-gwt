@@ -12,6 +12,7 @@ import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
 import com.google.gwt.core.client.GWT
 
 import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
+import java.util.Collections
 
 /**
  * The presenter for the ToDo application. This class is responsible for the lifecycle of the
@@ -24,7 +25,7 @@ class ToDoPresenter implements ViewEventHandler {
 	
 	TodoServiceAsync service = GWT::create(typeof(TodoService))
 
-	List<Todo> todos = new ArrayList<Todo>()
+	List<Todo> todos = newArrayList
 
 	View view
 
@@ -42,17 +43,8 @@ class ToDoPresenter implements ViewEventHandler {
 	 */
 	def updateTaskStatistics() {
 		val totalTasks = todos.size()
-
-		var completeTask = 0
-		for (Todo task : todos) {
-			if (task.isDone()) {
-				// FIXME ++ and += do not work here, why?
-//				completeTask += 1
-				completeTask = completeTask + 1
-			}
-		}
-
-		view.setTaskStatistics(totalTasks, completeTask)
+		var completeTasks = todos.filter[done].size
+		view.setTaskStatistics(totalTasks, completeTasks)
 	}
 
 	/**
@@ -69,7 +61,7 @@ class ToDoPresenter implements ViewEventHandler {
 	 */
 	override updateTask(Todo toDoItem) {
 		// if the item has become empty, remove it
-		if (toDoItem.getTitle().trim().equals("")) {
+		if (toDoItem.title.trim().equals("")) {
 			todos.remove(toDoItem);
 		}
 
@@ -81,10 +73,7 @@ class ToDoPresenter implements ViewEventHandler {
 	 * Sets the completed state of all tasks
 	 */
 	override markAllCompleted(boolean completed) {
-		// update the completed state of each item
-		for (Todo task : todos) {
-			task.setDone(completed);
-		}
+		todos.forEach[done = completed]
 		updateTaskStatistics();
 		saveState();
 	}
@@ -111,42 +100,33 @@ class ToDoPresenter implements ViewEventHandler {
 	 * Clears completed tasks and updates the view.
 	 */
 	 override clearCompletedTasks() {
-		val Iterator<Todo> iterator = todos.iterator();
-		while (iterator.hasNext()) {
-			val Todo item = iterator.next();
-			if (item.isDone()) {
-				iterator.remove();
-			}
-		}
+	 	todos = todos.filter[!done].toList
 		updateTaskStatistics();
 		saveState();
 	}
 
-	/**
-	 * Saves the current to-do items to local storage
-	 */
 	def private void saveState() {
 		val name = getCurrentName()
 		service.save(name, new ArrayList<Todo>(todos), onSuccess [
-				updateView(todos);
+			updateView
 		])
 	}
 
 	def private void loadState() {
 		val String name = getCurrentName();
 		service.load(name, onSuccess [result|
-				todos = result;
-				updateTaskStatistics();
-				updateView(result);
+			todos = result
+			updateTaskStatistics()
+			updateView
 		])
 	}
 
 	def private String getCurrentName() {
-		return currentName;
+		return currentName
 	}
 
-	def private void updateView(List<Todo> list) {
-		view.updateView(list);
+	def private void updateView() {
+		view.updateView(todos)
 	}
 
 }

@@ -8,6 +8,10 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 @GwtService
 class TodoServiceImpl {
 	
+	// TODO: Either migrate to memcache (supereasy)
+	// https://developers.google.com/appengine/docs/java/memcache/overview
+	// or
+	// datastore
 	static val TODOS = new ConcurrentHashMap<String, List<Todo>>()
 
 	override List<Todo> load(String name) {
