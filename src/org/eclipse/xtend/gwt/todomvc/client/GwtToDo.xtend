@@ -1,9 +1,9 @@
 package org.eclipse.xtend.gwt.todomvc.client
 
 import com.google.gwt.core.client.EntryPoint
-import com.google.gwt.user.client.ui.RootPanel
 import com.google.gwt.storage.client.Storage
 import com.google.gwt.user.client.Random
+import com.google.gwt.user.client.ui.RootPanel
 
 class GwtToDo implements EntryPoint {
 	

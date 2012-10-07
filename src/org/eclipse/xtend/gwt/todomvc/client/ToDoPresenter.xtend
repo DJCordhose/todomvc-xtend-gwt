@@ -1,18 +1,13 @@
 package org.eclipse.xtend.gwt.todomvc.client
 
+import com.google.gwt.core.client.GWT
 import java.util.ArrayList
-import java.util.Iterator
 import java.util.List
-
-import org.eclipse.xtend.gwt.todomvc.client.ViewEventHandler;
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.todomvc.shared.TodoService
 import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
 
-import com.google.gwt.core.client.GWT
-
 import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
-import java.util.Collections
 
 /**
  * The presenter for the ToDo application. This class is responsible for the lifecycle of the

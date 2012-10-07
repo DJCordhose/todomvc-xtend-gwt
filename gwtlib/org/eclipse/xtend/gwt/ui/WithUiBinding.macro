@@ -1,0 +1,128 @@
+package org.eclipse.xtend.gwt.ui
+
+import java.util.List
+import java.util.Map
+import javax.xml.parsers.DocumentBuilderFactory
+import org.w3c.dom.Document
+import org.w3c.dom.Node
+
+import static extension org.eclipse.xtend.gwt.ui.DocumentParsing.*
+import org.eclipse.xtend.core.xtend.XtendClass
+import org.eclipse.xtend.core.xtend.XtendFile
+import org.eclipse.xtext.common.types.TypesFactory
+import com.google.gwt.uibinder.client.UiField
+import org.eclipse.xtext.common.types.JvmAnnotationType
+import com.google.gwt.uibinder.client.UiBinder
+import com.google.gwt.user.client.ui.Widget
+import org.eclipse.xtext.common.types.JvmVisibility
+import org.eclipse.xtext.xbase.compiler.CompilationStrategyAdapter
+
+@WithUiBinding for class {
+	
+	process {
+		elements.forEach [
+			val uri = source.eResource.URI.trimSegments(1).appendSegment(name).appendFileExtension('ui.xml')
+			val in = eResource.resourceSet.URIConverter.createInputStream(uri)
+			val dom = try { 
+				DocumentBuilderFactory::newInstance.newDocumentBuilder.parse(in)
+			} catch (Exception io) {
+				error("Error loading file '"+uri.toString+"' : ["+io.message+"]")
+			}
+			val fields = dom.getFields
+			with (Names::fullName(it)) [
+				// add the inner interface
+				val binderIf = TypesFactory::eINSTANCE.createJvmGenericType => [ innerIf |
+					innerIf.^interface = true
+					innerIf.simpleName = it.simpleName+'UiBinder'
+					innerIf.superTypes += type(<UiBinder>type.type,<Widget>type, type(it)) 
+				]
+				members += binderIf
+				// add the static GWT.create field
+				field('uiBinder', type(binderIf)) => [
+					setStatic(true)
+					val adapter = new CompilationStrategyAdapter
+					adapter.setCompilationStrategy [
+						append('com.google.gwt.core.client.GWT.create(' + binderIf.simpleName + '.class)')
+					]
+					eAdapters.add(adapter)
+				]
+				for (entry : fields.entrySet) {
+					val f = field(entry.key, type(entry.value))
+					f.visibility = JvmVisibility::PROTECTED
+					f.annotations += TypesFactory::eINSTANCE.createJvmAnnotationReference => [ annoRef |
+						annoRef.annotation = <UiField>type.type as JvmAnnotationType
+					]
+				}
+			]
+		]
+	}
+} 
+
+class Names {
+	def static fullName(XtendClass it) {
+		(eContainer as XtendFile).^package + '.' + name
+	}
+}
+
+
+class DocumentParsing {
+	
+	def static Map<String,String> getFields(Document doc) {
+		val Map<String,String> result = newHashMap
+		val imports = getImports(doc)
+		val nodes = allNodes(doc)
+		for (n : nodes) {
+			val name = n.attributes?.getNamedItem("ui:field")
+			if (name != null) {
+				result.put(name.nodeValue, typeName(n, imports))
+			}
+		}
+		return result
+	}
+	
+	def static List<Node> allNodes(Document doc) {
+		val result = <Node>newArrayList()
+		addNodes(doc, result)
+		return result
+	}
+	
+	def private static void addNodes(Node node, List<Node> collected) {
+		collected += node
+		var i = 0
+		var max = node.childNodes.length
+		while (i < max) {
+			addNodes(node.childNodes.item(i), collected)
+			i = i + 1
+		}
+	}
+	
+	def static getImports(Document doc) {
+		val Map<String,String> result = newHashMap
+		val attrs = doc.documentElement.attributes
+		var i = 0
+		while (i < attrs.length) {
+			val att = attrs.item(i)
+			if (att.nodeName.startsWith('xmlns:') && att.nodeValue.startsWith('urn:import:')) {
+				val prefix = att.nodeName.substring(6)
+				val packName = att.nodeValue.substring(11)
+				result.put(prefix, packName)
+			}
+			i = i +1
+		}
+		return result
+	}
+	
+	def static String typeName(Node node, Map<String,String> imports) {
+		val fullName = node.nodeName
+		val idx = fullName.indexOf(':')
+		val prefix = if ( idx != -1) fullName.substring(0, idx) else null
+		val name = if (idx != -1) fullName.substring(idx+1) else fullName
+		
+		switch name {
+			case 'input' : 'com.google.gwt.dom.client.InputElement'
+			case 'span' : 'com.google.gwt.dom.client.SpanElement'
+			case prefix != null : imports.get(prefix)+"."+name
+			default : 'com.google.gwt.dom.client.Element'
+		}
+	}
+}
