@@ -9,9 +9,8 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 @GwtService
 class TodoServiceImpl {
 	
-	static val MemcacheService memcache = MemcacheServiceFactory::getMemcacheService()
-	
 	 override List<Todo> load(String name) {
+		val MemcacheService memcache = MemcacheServiceFactory::getMemcacheService()
 		var todos = memcache.get(name)
 		if (todos == null) {
 			todos = newArrayList
@@ -20,6 +19,7 @@ class TodoServiceImpl {
 	}
 
 	override void save(String name, List<Todo> todos) {
+		val MemcacheService memcache = MemcacheServiceFactory::getMemcacheService()
 		memcache.put(name, todos)
 	}
 }
