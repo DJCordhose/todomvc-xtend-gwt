@@ -23,10 +23,6 @@ class GwtToDo implements EntryPoint {
 	override onModuleLoad() {
 		service.load(onSuccess [
 			todos = it
-			if (todos == null) {
-				todos = newArrayList
-			}
-
 			RootPanel::get.add(
 				view = new ToDoView => [
 					onAddTodo [
@@ -71,9 +67,8 @@ class GwtToDo implements EntryPoint {
 		val totalTodos = todos.size
 		var completeTodos = todos.filter[done].size
 		view.setTodoStatistics(totalTodos, completeTodos)
-		todos.save(onSuccess [
-			view.updateView(todos)
-		])
+		view.updateView(todos)
+		todos.save(onSuccess [])
 	}
 
 }

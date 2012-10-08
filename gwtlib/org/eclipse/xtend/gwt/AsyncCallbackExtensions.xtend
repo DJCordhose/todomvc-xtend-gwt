@@ -42,10 +42,11 @@ class DefaultAsyncCallback<T> implements AsyncCallback<T> {
 	@Property var (Throwable)=>void failureHandler
 
 	override onFailure(Throwable caught) {
-		if (getFailureHandler == null) {
+		if (failureHandler == null) {
 			log(caught.toString)
+		} else {
+			failureHandler.apply(caught)
 		}
-		getFailureHandler.apply(caught)
 	}
 	
 	override onSuccess(T result) {
