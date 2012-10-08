@@ -78,7 +78,7 @@ class GwtToDo implements EntryPoint {
 	}
 	
 		
-	def getCurrentName() {
+	def private getCurrentName() {
 		var currentName = "name" + Random::nextInt()
 		val Storage storage = Storage::getLocalStorageIfSupported();
 		if (storage != null) {

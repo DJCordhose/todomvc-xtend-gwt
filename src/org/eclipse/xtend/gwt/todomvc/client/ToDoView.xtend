@@ -70,7 +70,7 @@ class ToDoView extends Composite {
 	
 	def updateView(List<Todo> list) {
 		todoPanel.clear
-		for (Todo todo : list.reverseView) {
+		for (Todo todo : list/*.reverseView*/) {
 			val todoComposite = new TodoComposite(todo, updateTodo, deleteTodo)
 			todoPanel.add(todoComposite)
 		}
