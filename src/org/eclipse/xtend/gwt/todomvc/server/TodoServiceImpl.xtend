@@ -11,9 +11,6 @@ class TodoServiceImpl {
 	
 	 override List<Todo> load() {
 		var todos = memcacheService.get(threadLocalRequest.remoteAddr)
-		if (todos == null) {
-			todos = newArrayList
-		}
 		return todos as List<Todo>
 	}
 

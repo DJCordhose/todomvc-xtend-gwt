@@ -23,6 +23,10 @@ class GwtToDo implements EntryPoint {
 	override onModuleLoad() {
 		service.load(onSuccess [
 			todos = it
+			if (todos == null) {
+				todos = newArrayList
+			}
+
 			RootPanel::get.add(
 				view = new ToDoView => [
 					onAddTodo [
