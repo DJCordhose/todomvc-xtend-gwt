@@ -7,10 +7,13 @@ import java.util.List
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.todomvc.shared.TodoService
 import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
+import com.google.gwt.storage.client.Storage
+import com.google.gwt.user.client.Random
 
 import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 
 class GwtToDo implements EntryPoint {
+	static val STORAGE_KEY = "TODO-USER"
 	
 	extension TodoServiceAsync service = GWT::create(typeof(TodoService))
 	
@@ -21,8 +24,11 @@ class GwtToDo implements EntryPoint {
 	 * Gwt's main(String[])
 	 */
 	override onModuleLoad() {
-		service.load(onSuccess [
+		service.load(currentName, onSuccess [
 			todos = it
+			if (todos == null) {
+				todos = newArrayList
+			}
 			RootPanel::get.add(
 				view = new ToDoView => [
 					onAddTodo [
@@ -68,7 +74,23 @@ class GwtToDo implements EntryPoint {
 		var completeTodos = todos.filter[done].size
 		view.setTodoStatistics(totalTodos, completeTodos)
 		view.updateView(todos)
-		todos.save(onSuccess [])
+		todos.save(currentName, onSuccess [])
 	}
+	
+		
+	def getCurrentName() {
+		var currentName = "name" + Random::nextInt()
+		val Storage storage = Storage::getLocalStorageIfSupported();
+		if (storage != null) {
+			val storedName = storage.getItem(STORAGE_KEY);
+			if (storedName == null || storedName.equals("")) {
+				storage.setItem(STORAGE_KEY, currentName)
+			} else {
+				currentName = storedName
+			}
+		}
+		return currentName
+	}
+	
 
 }
