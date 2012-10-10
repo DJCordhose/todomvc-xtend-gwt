@@ -2,13 +2,13 @@ package org.eclipse.xtend.gwt.todomvc.client
 
 import com.google.gwt.core.client.EntryPoint
 import com.google.gwt.core.client.GWT
+import com.google.gwt.storage.client.Storage
+import com.google.gwt.user.client.Random
 import com.google.gwt.user.client.ui.RootPanel
 import java.util.List
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.todomvc.shared.TodoService
 import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
-import com.google.gwt.storage.client.Storage
-import com.google.gwt.user.client.Random
 
 import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 
@@ -24,12 +24,7 @@ class GwtToDo implements EntryPoint {
 	 * Gwt's main(String[])
 	 */
 	override onModuleLoad() {
-		service.load(currentName, onSuccess [
-			todos = it
-			if (todos == null) {
-				todos = newArrayList
-			}
-			RootPanel::get.add(
+		RootPanel::get.add(
 				view = new ToDoView => [
 					onAddTodo [
 						// don't add a todo if todoText is empty
@@ -61,6 +56,11 @@ class GwtToDo implements EntryPoint {
 					]
 				]
 			)
+		service.load(currentName, onSuccess [
+			todos = it
+			if (todos == null) {
+				todos = newArrayList
+			}
 			updateTodoStatistics
 		])
 	}

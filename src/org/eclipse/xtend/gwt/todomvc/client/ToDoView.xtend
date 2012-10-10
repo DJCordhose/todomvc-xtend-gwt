@@ -42,7 +42,7 @@ class ToDoView extends Composite {
 				callback.apply(null)
 		]
 	}
-
+	
 	def onClearCompletedTodos((Void)=>void callback) {
 		clearCompleted.addClickHandler [
 			callback.apply(null)
@@ -70,7 +70,7 @@ class ToDoView extends Composite {
 	
 	def updateView(List<Todo> list) {
 		todoPanel.clear
-		for (Todo todo : list/*.reverseView*/) {
+		for (todo : list) {
 			val todoComposite = new TodoComposite(todo, updateTodo, deleteTodo)
 			todoPanel.add(todoComposite)
 		}
