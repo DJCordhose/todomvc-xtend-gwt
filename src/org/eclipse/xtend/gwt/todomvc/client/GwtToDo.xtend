@@ -56,6 +56,8 @@ class GwtToDo implements EntryPoint {
 					]
 				]
 			)
+		// to initially display statistics without waiting for return of server call	
+		view.setTodoStatistics(0, 0)
 		service.load(currentName, onSuccess [
 			todos = it
 			if (todos == null) {
