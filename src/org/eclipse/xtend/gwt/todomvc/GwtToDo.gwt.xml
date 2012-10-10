@@ -4,7 +4,7 @@
   <!-- Other module inherits                                      -->
   <inherits name='org.eclipse.xtend.GwtLib'/>
   
-  <entry-point class='org.eclipse.xtend.gwt.todomvc.client.GwtToDo'/>
+  <entry-point class='org.eclipse.xtend.gwt.todomvc.client.ToDoPresenter'/>
   <source path='client'/>
   <source path='shared'/>
   <set-property name="user.agent" value="gecko1_8,safari"/>

@@ -12,7 +12,7 @@ import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
 
 import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 
-class GwtToDo implements EntryPoint {
+class ToDoPresenter implements EntryPoint {
 	static val STORAGE_KEY = "TODO-USER"
 	
 	extension TodoServiceAsync service = GWT::create(typeof(TodoService))
