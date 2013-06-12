@@ -13,8 +13,8 @@ import org.eclipse.xtend.gwt.ui.WithUiBinding
 class ToDoView extends Composite {
 
 	new() {
-		initWidget(uiBinder.createAndBindUi(this))
-		
+		initWidget(UI_BINDER.createAndBindUi(this))
+
 		// set stuff which can't be set in XML
 		mainSection.id = 'main'
 		clearCompleted.element.id = 'clear-completed'
@@ -23,26 +23,26 @@ class ToDoView extends Composite {
 		todoStatsContainer.id = 'footer'
 		toggleAll.id = 'toggle-all'
 	}
-	
+
 	(Todo)=>void updateTodo
-	
+
 	def onUpdateTodo((Todo)=>void updateTodo) {
 		this.updateTodo = updateTodo
 	}
-	
+
 	(Todo)=>void deleteTodo
-	
+
 	def onDeleteTodo((Todo)=>void deleteTodo) {
 		this.deleteTodo = deleteTodo
 	}
-	
+
 	def onAddTodo((Void)=>void callback) {
 		todoText.addKeyUpHandler [
 			if (nativeKeyCode == KeyCodes::KEY_ENTER)
 				callback.apply(null)
 		]
 	}
-	
+
 	def onClearCompletedTodos((Void)=>void callback) {
 		clearCompleted.addClickHandler [
 			callback.apply(null)
@@ -54,20 +54,20 @@ class ToDoView extends Composite {
 		DOM::sinkEvents(clientToggleElement, Event::ONCLICK)
 		DOM::setEventListener(clientToggleElement) [
 			handler.apply(toggleAll.isChecked)
-		] 
+		]
 	}
-	
+
 	def clearTodoText() {
 		todoText.text = ''
 	}
-	
+
 	def getTodoText() {
 		val result = todoText.text?.trim
 		if (result == null || result == '')
 			return null
 		return result
 	}
-	
+
 	def updateView(List<Todo> list) {
 		todoPanel.clear
 		for (todo : list) {
@@ -75,7 +75,7 @@ class ToDoView extends Composite {
 			todoPanel.add(todoComposite)
 		}
 	}
-	
+
 	def setTodoStatistics(int totalTodos, int completedTodos) {
 		val remainingTodos = totalTodos - completedTodos
 
@@ -84,13 +84,12 @@ class ToDoView extends Composite {
 		hideElement(clearCompleted.element, completedTodos == 0)
 
 		remainingTodosCount.innerText = remainingTodos.toString
-		remainingTodosLabel.innerText = 
-			if (remainingTodos > 1 || remainingTodos == 0) "items" else "item"
+		remainingTodosLabel.innerText = if(remainingTodos > 1 || remainingTodos == 0) "items" else "item"
 		clearTodosCount.innerHTML = completedTodos.toString
 
 		toggleAll.checked = totalTodos == completedTodos
 	}
-	
+
 	def private void hideElement(Element element, boolean hide) {
 		if (hide) {
 			element.setAttribute("style", "display:none;");
@@ -98,5 +97,5 @@ class ToDoView extends Composite {
 			element.setAttribute("style", "display:block;");
 		}
 	}
-	
+
 }

@@ -11,16 +11,16 @@ import static extension org.eclipse.xtend.gwt.ui.UiBuilder.*
 import static com.google.gwt.event.dom.client.KeyCodes.*
 
 class TodoComposite extends Composite {
-	
+
 	HTMLPanel li
-	TextBox textBox 
+	TextBox textBox
 	CheckBox checkBox
 	Label label
-	
+
 	Todo todo
 	(Todo)=>void updateTodo
 	(Todo)=>void deleteTodo
-	
+
 	new(Todo todo, (Todo)=>void updateTodo, (Todo)=>void deleteTodo) {
 		this.todo = todo
 		this.updateTodo = updateTodo
@@ -28,7 +28,7 @@ class TodoComposite extends Composite {
 		initWidget(createWidget())
 		updateView()
 	}
-	
+
 	def createWidget() {
 		li = 'li'.htmlPanel [
 			textBox = textBox [
@@ -40,12 +40,12 @@ class TodoComposite extends Composite {
 				]
 				onKeyPress [
 					switch nativeEvent.keyCode {
-						case KEY_ENTER : {
+						case KEY_ENTER: {
 							todo.title = textBox.value
 							viewMode
 							updateTodo.apply(todo)
 						}
-						case KEY_ESCAPE : {
+						case KEY_ESCAPE: {
 							viewMode
 							updateTodo.apply(todo)
 						}
@@ -76,18 +76,18 @@ class TodoComposite extends Composite {
 			]
 		]
 	}
-	
+
 	def viewMode() {
 		updateView
 		li.element.removeAttribute('class')
 	}
-	
+
 	def editMode() {
 		updateView
-		li.element.setAttribute('class','editing')
+		li.element.setAttribute('class', 'editing')
 		textBox.focus = true
 	}
-	
+
 	def updateView() {
 		textBox.text = todo.title
 		label.text = todo.title
@@ -98,5 +98,5 @@ class TodoComposite extends Composite {
 			li.element.removeAttribute("class")
 		}
 	}
-	
+
 }
