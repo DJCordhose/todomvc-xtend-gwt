@@ -28,7 +28,7 @@ annotation WithUiBinding {
 
 class WithUiBindingProcessor extends AbstractClassProcessor {
 
-	private static final String SRC = "c:/itemis/workspacegwtjune/todomvc-xtend-gwt/todomvc/src/"
+	private static final String SRC = "/Users/kosyakov/Documents/workspaces/vaadin/todomvc-xtend-gwt/todomvc/src/"
 
 	override doRegisterGlobals(ClassDeclaration it, extension RegisterGlobalsContext context) {
 		registerInterface(uiBinderInterface(it))
@@ -45,7 +45,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 				final = true
 				type = uiBinderInterfaceType.newTypeReference
 				initializer = [
-					'''com.google.gwt.core.client.GWT.create(«uiBinderInterfaceType.simpleName».class)'''
+					'''com.google.gwt.core.client.GWT.create(Â«uiBinderInterfaceType.simpleNameÂ».class)'''
 				]
 			])
 
@@ -53,7 +53,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 		val dom = try {
 			DocumentBuilderFactory.newInstance.newDocumentBuilder.parse(in)
 		} catch (Exception io) {
-			addError('''Error loading file '«uiXml»' : [«io.message»]''')
+			addError('''Error loading file 'Â«uiXmlÂ»' : [Â«io.messageÂ»]''')
 			val byteArrayOutputStream = new ByteArrayOutputStream
 			io.printStackTrace(new PrintStream(byteArrayOutputStream))
 			addError(byteArrayOutputStream.toString)
@@ -76,7 +76,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 
 	def uiXml(MutableClassDeclaration it) {
 		SRC + qualifiedName.substring(0, qualifiedName.length - simpleName.length).replaceAll('\\.', '/') + simpleName +
-			".ui.xml "
+			".ui.xml"
 	}
 
 	def static Map<String, String> getFields(Document doc) {
