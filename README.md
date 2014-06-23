@@ -25,7 +25,7 @@ Code Samples
     // filter out todos that are done
     todos = todos.filter[!done].toList
 
-    // makr all todos as completed
+    // mark all todos as completed
     todos.forEach[done = true]
 
 ### UI Builder
