@@ -4,6 +4,8 @@ GWT Xtend TodoMVC
 This implementation of the TodoMVC app uses GWT and Xtend. 
 It has a backend running on the Google App Engine that is used to load and store your todos.
 
+Try the app at http://1-dot-todomvc.appspot.com.
+
 Why GWT?
 --------
 
@@ -31,24 +33,24 @@ Code Samples
 ### UI Builder
 
       flowPanel [
-				styleName = 'view'
-				checkBox = checkBox [
-					styleName = 'toggle'
-					onClick [
-						todo.done = !todo.done
-						updateView
-						updateTodo.apply(todo)
-					]
-				]
-				label = label [
-					onDoubleClick [
-						editMode
-					]
-				]
-				button [
-					styleName = 'destroy'
-					onClick [
-						deleteTodo.apply(todo)
-					]
-				]
+		styleName = 'view'
+		checkBox = checkBox [
+			styleName = 'toggle'
+			onClick [
+				todo.done = !todo.done
+				updateView
+				updateTodo.apply(todo)
 			]
+		]
+		label = label [
+			onDoubleClick [
+				editMode
+			]
+		]
+		button [
+			styleName = 'destroy'
+			onClick [
+				deleteTodo.apply(todo)
+			]
+		]
+	]
