@@ -49,8 +49,10 @@ class GwtServiceProcessor extends AbstractClassProcessor {
 		val interfaceAsyncType = findInterface(interfaceAsyncName)
 
 		interfaceType.extendedInterfaces = interfaceType.extendedInterfaces + #[typeof(RemoteService).newTypeReference]
-		interfaceType.addAnnotation(typeof(RemoteServiceRelativePath).newTypeReference.type).set('value',
-			interfaceSimpleName.toFirstLower)
+		val name = interfaceSimpleName.toFirstLower
+		interfaceType.addAnnotation(RemoteServiceRelativePath.newAnnotationReference [
+			set('value', name)
+		])
 
 		for (method : declaredMethods.filter[visibility == Visibility::PUBLIC]) {
 			interfaceType.addMethod(method.simpleName,

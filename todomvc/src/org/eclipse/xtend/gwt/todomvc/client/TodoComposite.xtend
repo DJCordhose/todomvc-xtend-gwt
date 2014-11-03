@@ -30,7 +30,7 @@ class TodoComposite extends Composite {
 	}
 
 	def createWidget() {
-		li = 'li'.htmlPanel [
+		li = htmlPanel('li') [
 			textBox = textBox [
 				styleName = 'edit'
 				onBlur [

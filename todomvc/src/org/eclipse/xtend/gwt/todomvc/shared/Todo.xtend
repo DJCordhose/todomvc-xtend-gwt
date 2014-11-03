@@ -1,8 +1,9 @@
 package org.eclipse.xtend.gwt.todomvc.shared
 
 import java.io.Serializable
+import org.eclipse.xtend.lib.annotations.Accessors
 
-class Todo implements Serializable {
-	@Property String title
-	@Property boolean done
+@Accessors class Todo implements Serializable {
+	String title
+	boolean done
 }

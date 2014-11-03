@@ -1,7 +1,7 @@
 package org.eclipse.xtend.gwt.todomvc.client
 
-import com.google.gwt.event.dom.client.KeyCodes
 import com.google.gwt.dom.client.Element
+import com.google.gwt.event.dom.client.KeyCodes
 import com.google.gwt.user.client.DOM
 import com.google.gwt.user.client.Event
 import com.google.gwt.user.client.ui.Composite
@@ -9,8 +9,7 @@ import java.util.List
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.ui.WithUiBinding
 
-@WithUiBinding
-class ToDoView extends Composite {
+@WithUiBinding class ToDoView extends Composite {
 
 	new() {
 		initWidget(UI_BINDER.createAndBindUi(this))
@@ -50,9 +49,9 @@ class ToDoView extends Composite {
 	}
 
 	def onMarkAllCompleted((Boolean)=>void handler) {
-		val com.google.gwt.user.client.Element clientToggleElement = toggleAll.cast
-		DOM::sinkEvents(clientToggleElement, Event::ONCLICK)
-		DOM::setEventListener(clientToggleElement) [
+		val Element clientToggleElement = toggleAll.cast
+		DOM.sinkEvents(clientToggleElement, Event.ONCLICK)
+		DOM.setEventListener(clientToggleElement) [
 			handler.apply(toggleAll.isChecked)
 		]
 	}
@@ -63,7 +62,7 @@ class ToDoView extends Composite {
 
 	def getTodoText() {
 		val result = todoText.text?.trim
-		if (result == null || result == '')
+		if (result.nullOrEmpty)
 			return null
 		return result
 	}

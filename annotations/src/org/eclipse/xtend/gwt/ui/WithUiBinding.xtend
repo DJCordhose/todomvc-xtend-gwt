@@ -28,7 +28,7 @@ annotation WithUiBinding {
 
 class WithUiBindingProcessor extends AbstractClassProcessor {
 
-	private static final String SRC = "/Users/kosyakov/Documents/workspaces/vaadin/todomvc-xtend-gwt/todomvc/src/"
+	private static final String SRC = "/src/"
 
 	override doRegisterGlobals(ClassDeclaration it, extension RegisterGlobalsContext context) {
 		registerInterface(uiBinderInterface(it))
@@ -48,8 +48,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 					'''com.google.gwt.core.client.GWT.create(«uiBinderInterfaceType.simpleName».class)'''
 				]
 			])
-
-		val in = new FileInputStream(uiXml)
+		val in = compilationUnit.filePath.projectFolder.append(uiXml).contentsAsStream
 		val dom = try {
 			DocumentBuilderFactory.newInstance.newDocumentBuilder.parse(in)
 		} catch (Exception io) {
@@ -65,7 +64,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 				[
 					type = findTypeGlobally(entry.value).newTypeReference
 					visibility = Visibility::PROTECTED
-					addAnnotation(typeof(UiField).newTypeReference.type)
+					addAnnotation(UiField.newAnnotationReference)
 				])
 		}
 	}

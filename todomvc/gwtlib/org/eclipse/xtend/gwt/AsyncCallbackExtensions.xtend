@@ -2,6 +2,8 @@ package org.eclipse.xtend.gwt
 
 import com.google.gwt.user.client.rpc.AsyncCallback
 import static com.google.gwt.core.client.GWT.*
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class AsyncCallbackExtensions {
 	
@@ -38,8 +40,8 @@ class AsyncCallbackExtensions {
 
 class DefaultAsyncCallback<T> implements AsyncCallback<T> {
 	
-	@Property var (T)=>void successHandler
-	@Property var (Throwable)=>void failureHandler
+	@Accessors var (T)=>void successHandler
+	@Accessors var (Throwable)=>void failureHandler
 
 	override onFailure(Throwable caught) {
 		if (failureHandler == null) {

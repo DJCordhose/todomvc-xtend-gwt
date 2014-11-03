@@ -15,7 +15,7 @@ import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 class ToDoPresenter implements EntryPoint {
 	static val STORAGE_KEY = "TODO-USER"
 
-	extension TodoServiceAsync service = GWT::create(typeof(TodoService))
+	extension TodoServiceAsync service = GWT.create(typeof(TodoService))
 
 	List<Todo> todos = newArrayList
 	ToDoView view
@@ -24,7 +24,7 @@ class ToDoPresenter implements EntryPoint {
 	 * Gwt's main(String[])
 	 */
 	override onModuleLoad() {
-		RootPanel::get.add(
+		RootPanel.get.add(
 			view = new ToDoView => [
 				onAddTodo [
 					// don't add a todo if todoText is empty
@@ -82,8 +82,8 @@ class ToDoPresenter implements EntryPoint {
 	}
 
 	def private getCurrentName() {
-		var currentName = "name" + Random::nextInt()
-		val Storage storage = Storage::getLocalStorageIfSupported();
+		var currentName = "name" + Random.nextInt()
+		val Storage storage = Storage.getLocalStorageIfSupported();
 		if (storage != null) {
 			val storedName = storage.getItem(STORAGE_KEY);
 			if (storedName == null || storedName.equals("")) {

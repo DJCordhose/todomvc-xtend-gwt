@@ -4,15 +4,16 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gwtlib"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 7 [1.7.0_67]"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/guava-gwt-13.0.jar"/>
 	<classpathentry kind="lib" path="lib/jsr305-1.3.9.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib.gwt_2.4.2.v201306100626.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib.gwt_2.4.2.v201306100626.jar"/>
 	<classpathentry kind="lib" path="lib/guava-13.0.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib_2.4.2.v201306100544.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib_2.4.2.v201306100544.jar"/>
 	<classpathentry kind="lib" path="lib/todomvc-xtend-gwt-annotation.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib.gwt-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtend.lib.macro-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.xtext.xbase.lib.gwt-2.7.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

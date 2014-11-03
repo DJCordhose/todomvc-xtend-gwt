@@ -6,11 +6,10 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 
 import static com.google.appengine.api.memcache.MemcacheServiceFactory.*
 
-@GwtService
-class TodoServiceImpl {
+@GwtService class TodoServiceImpl {
 
 	override List<Todo> load(String name) {
-		return memcacheService.get(name) as List<Todo>
+		memcacheService.get(name) as List<Todo>
 	}
 
 	override void save(List<Todo> todos, String name) {
