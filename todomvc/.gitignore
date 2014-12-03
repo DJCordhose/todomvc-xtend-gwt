@@ -1,3 +1,4 @@
 gwt-unitCache/
 xtend-gen/
 .gwt/
+/target/
