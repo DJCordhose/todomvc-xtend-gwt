@@ -4,7 +4,6 @@ import com.google.gwt.uibinder.client.UiBinder
 import com.google.gwt.uibinder.client.UiField
 import com.google.gwt.user.client.ui.Widget
 import java.io.ByteArrayOutputStream
-import java.io.FileInputStream
 import java.io.PrintStream
 import java.lang.annotation.ElementType
 import java.lang.annotation.Target
