@@ -34,49 +34,43 @@ class GwtServiceProcessor extends AbstractClassProcessor {
 
 	override doTransform(MutableClassDeclaration it, extension TransformationContext context) {
 		if (!simpleName.endsWith(IMPL)) {
-			addError('''The name must end with '«IMPL»'.''')
+			addError('''The name must end with 'Â«IMPLÂ»'.''')
 		}
 
 		if (!packageName.contains(SERVER)) {
 			addError("A service must reside under the 'server' package.")
 		}
 
-		if (extendedClass != typeof(Object).newTypeReference) {
+		if (extendedClass != Object.newTypeReference) {
 			addError("A service must not extend another class.")
 		}
 
 		val interfaceType = findInterface(interfaceName)
 		val interfaceAsyncType = findInterface(interfaceAsyncName)
 
-		interfaceType.extendedInterfaces = interfaceType.extendedInterfaces + #[typeof(RemoteService).newTypeReference]
+		interfaceType.extendedInterfaces = interfaceType.extendedInterfaces + #[RemoteService.newTypeReference]
 		val name = interfaceSimpleName.toFirstLower
-		interfaceType.addAnnotation(RemoteServiceRelativePath.newAnnotationReference [
-			set('value', name)
-		])
+		interfaceType.addAnnotation(
+			RemoteServiceRelativePath.newAnnotationReference [
+				set('value', name)
+			]
+		)
 
 		for (method : declaredMethods.filter[visibility == Visibility::PUBLIC]) {
-			interfaceType.addMethod(method.simpleName,
-				[
-					returnType = method.returnType
-					method.parameters.forEach(p|addParameter(p.simpleName, p.type))
-				])
-			interfaceAsyncType.addMethod(method.simpleName,
-				[
-					method.parameters.forEach(p|addParameter(p.simpleName, p.type))
-					addParameter('result',
-						typeof(AsyncCallback).newTypeReference(
-							switch method.returnType {
-								case primitiveVoid: newTypeReference(typeof(Void))
-								case primitiveBoolean: newTypeReference(typeof(Boolean))
-								case primitiveInt: newTypeReference(typeof(Integer))
-								case primitiveLong: newTypeReference(typeof(Long))
-								//...
-								default: method.returnType
-							}))
-				])
+			interfaceType.addMethod(method.simpleName) [
+				returnType = method.returnType
+				method.parameters.forEach(p|addParameter(p.simpleName, p.type))
+			]
+			interfaceAsyncType.addMethod(method.simpleName) [
+				method.parameters.forEach(p|addParameter(p.simpleName, p.type))
+				addParameter(
+					'result',
+					AsyncCallback.newTypeReference(method.returnType.wrapperIfPrimitive)
+				)
+			]
 		}
 
-		extendedClass = typeof(RemoteServiceServlet).newTypeReference
+		extendedClass = RemoteServiceServlet.newTypeReference
 		implementedInterfaces = implementedInterfaces + #[interfaceType.newTypeReference]
 	}
 
