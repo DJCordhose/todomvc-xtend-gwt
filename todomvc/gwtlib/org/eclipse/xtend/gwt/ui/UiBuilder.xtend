@@ -37,18 +37,21 @@ class UiBuilder {
 		initializer.apply(result)
 		return result
 	}
+	
 	def static button(Panel parent, (Button)=>void initializer) {
 		val result = new Button
 		parent.add(result)
 		initializer.apply(result)
 		return result
 	}
+	
 	def static label(Panel parent, (Label)=>void initializer) {
 		val result = new Label
 		parent.add(result)
 		initializer.apply(result)
 		return result
 	}
+	
 	def static textBox(Panel parent, (TextBox)=>void initializer) {
 		val result = new TextBox
 		parent.add(result)

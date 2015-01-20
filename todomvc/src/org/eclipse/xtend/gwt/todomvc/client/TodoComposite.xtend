@@ -25,8 +25,8 @@ class TodoComposite extends Composite {
 		this.todo = todo
 		this.updateTodo = updateTodo
 		this.deleteTodo = deleteTodo
-		initWidget(createWidget())
-		updateView()
+		initWidget(createWidget)
+		updateView
 	}
 
 	def createWidget() {

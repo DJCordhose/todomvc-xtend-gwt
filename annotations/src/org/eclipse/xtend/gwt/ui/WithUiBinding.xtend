@@ -23,11 +23,13 @@ annotation WithUiBinding {
 class WithUiBindingProcessor extends AbstractClassProcessor {
 
 	override doRegisterGlobals(ClassDeclaration it, extension RegisterGlobalsContext context) {
-		registerInterface(uiBinderInterface(it))
+		registerInterface(uiBinderInterface)
 	}
 
 	override doTransform(MutableClassDeclaration it, extension TransformationContext context) {
 		val uiBinderInterfaceType = findInterface(uiBinderInterface)
+		uiBinderInterfaceType.primarySourceElement = primarySourceElement
+		
 		uiBinderInterfaceType.extendedInterfaces = uiBinderInterfaceType.extendedInterfaces +
 			#[UiBinder.newTypeReference(Widget.newTypeReference, it.newTypeReference)]
 
@@ -35,9 +37,8 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 			static = true
 			final = true
 			type = uiBinderInterfaceType.newTypeReference
-			initializer = [
+			initializer = 
 				'''com.google.gwt.core.client.GWT.create(«uiBinderInterfaceType.simpleName».class)'''
-			]
 		]
 		val parser = createUiBinderParser(context)
 		if (parser == null) {
@@ -47,7 +48,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 		for (entry : fields.entrySet) {
 			addField(entry.key) [
 				type = entry.value.newTypeReference
-				visibility = Visibility::PROTECTED
+				visibility = Visibility.PROTECTED
 				addAnnotation(UiField.newAnnotationReference)
 			]
 		}
@@ -61,7 +62,7 @@ class WithUiBindingProcessor extends AbstractClassProcessor {
 			val byteArrayOutputStream = new ByteArrayOutputStream
 			io.printStackTrace(new PrintStream(byteArrayOutputStream))
 			addError(byteArrayOutputStream.toString)
-			null as UiBinderParser
+			return null
 		}
 	}
 

@@ -15,7 +15,7 @@ import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 class ToDoPresenter implements EntryPoint {
 	static val STORAGE_KEY = "TODO-USER"
 
-	extension TodoServiceAsync service = GWT.create(typeof(TodoService))
+	extension TodoServiceAsync service = GWT.create(TodoService)
 
 	List<Todo> todos = newArrayList
 	ToDoView view
@@ -44,8 +44,8 @@ class ToDoPresenter implements EntryPoint {
 					todos.remove(it)
 					updateTodoStatistics
 				]
-				onMarkAllCompleted [ completed |
-					todos.forEach[done = completed]
+				onMarkAllCompleted [ isCompleted |
+					todos.forEach[done = isCompleted]
 					updateTodoStatistics
 				]
 				onUpdateTodo [
@@ -73,7 +73,7 @@ class ToDoPresenter implements EntryPoint {
 	 * Computes the todo statistics, updates the view and synchronizes 
 	 * with the current state to the server
 	 */
-	def private updateTodoStatistics() {
+	private def updateTodoStatistics() {
 		val totalTodos = todos.size
 		var completeTodos = todos.filter[done].size
 		view.setTodoStatistics(totalTodos, completeTodos)
@@ -81,9 +81,9 @@ class ToDoPresenter implements EntryPoint {
 		todos.save(currentName, onSuccess [])
 	}
 
-	def private getCurrentName() {
-		var currentName = "name" + Random.nextInt()
-		val Storage storage = Storage.getLocalStorageIfSupported();
+	private def getCurrentName() {
+		var currentName = "name" + Random.nextInt
+		val Storage storage = Storage.getLocalStorageIfSupported
 		if (storage != null) {
 			val storedName = storage.getItem(STORAGE_KEY);
 			if (storedName == null || storedName.equals("")) {

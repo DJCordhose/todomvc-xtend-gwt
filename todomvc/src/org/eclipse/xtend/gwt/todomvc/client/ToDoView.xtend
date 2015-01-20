@@ -11,6 +11,9 @@ import org.eclipse.xtend.gwt.ui.WithUiBinding
 
 @WithUiBinding class ToDoView extends Composite {
 
+	(Todo)=>void updateTodo
+	(Todo)=>void deleteTodo
+	
 	new() {
 		initWidget(UI_BINDER.createAndBindUi(this))
 
@@ -23,13 +26,9 @@ import org.eclipse.xtend.gwt.ui.WithUiBinding
 		toggleAll.id = 'toggle-all'
 	}
 
-	(Todo)=>void updateTodo
-
 	def onUpdateTodo((Todo)=>void updateTodo) {
 		this.updateTodo = updateTodo
 	}
-
-	(Todo)=>void deleteTodo
 
 	def onDeleteTodo((Todo)=>void deleteTodo) {
 		this.deleteTodo = deleteTodo
@@ -37,7 +36,7 @@ import org.eclipse.xtend.gwt.ui.WithUiBinding
 
 	def onAddTodo((Void)=>void callback) {
 		todoText.addKeyUpHandler [
-			if (nativeKeyCode == KeyCodes::KEY_ENTER)
+			if (nativeKeyCode == KeyCodes.KEY_ENTER)
 				callback.apply(null)
 		]
 	}
@@ -89,7 +88,7 @@ import org.eclipse.xtend.gwt.ui.WithUiBinding
 		toggleAll.checked = totalTodos == completedTodos
 	}
 
-	def private void hideElement(Element element, boolean hide) {
+	private def void hideElement(Element element, boolean hide) {
 		if (hide) {
 			element.setAttribute("style", "display:none;");
 		} else {

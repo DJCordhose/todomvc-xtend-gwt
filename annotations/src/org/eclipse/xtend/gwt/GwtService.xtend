@@ -34,7 +34,7 @@ class GwtServiceProcessor extends AbstractClassProcessor {
 
 	override doTransform(MutableClassDeclaration it, extension TransformationContext context) {
 		if (!simpleName.endsWith(IMPL)) {
-			addError('''The name must end with '«IMPL»'.''')
+			addError('''The name must end with 'Â«IMPLÂ»'.''')
 		}
 
 		if (!packageName.contains(SERVER)) {
@@ -46,37 +46,47 @@ class GwtServiceProcessor extends AbstractClassProcessor {
 		}
 
 		val interfaceType = findInterface(interfaceName)
+		interfaceType.primarySourceElement = it.primarySourceElement
+		
 		val interfaceAsyncType = findInterface(interfaceAsyncName)
+		interfaceAsyncType.primarySourceElement = it.primarySourceElement
 
-		interfaceType.extendedInterfaces = interfaceType.extendedInterfaces + #[typeof(RemoteService).newTypeReference]
+		interfaceType.extendedInterfaces = interfaceType.extendedInterfaces + #[RemoteService.newTypeReference]
 		val name = interfaceSimpleName.toFirstLower
 		interfaceType.addAnnotation(RemoteServiceRelativePath.newAnnotationReference [
 			set('value', name)
 		])
 
-		for (method : declaredMethods.filter[visibility == Visibility::PUBLIC]) {
-			interfaceType.addMethod(method.simpleName,
-				[
-					returnType = method.returnType
-					method.parameters.forEach(p|addParameter(p.simpleName, p.type))
-				])
-			interfaceAsyncType.addMethod(method.simpleName,
-				[
-					method.parameters.forEach(p|addParameter(p.simpleName, p.type))
-					addParameter('result',
-						typeof(AsyncCallback).newTypeReference(
-							switch method.returnType {
-								case primitiveVoid: newTypeReference(typeof(Void))
-								case primitiveBoolean: newTypeReference(typeof(Boolean))
-								case primitiveInt: newTypeReference(typeof(Integer))
-								case primitiveLong: newTypeReference(typeof(Long))
-								//...
-								default: method.returnType
-							}))
-				])
+		for (method : declaredMethods.filter[visibility == Visibility.PUBLIC]) {
+			interfaceType.addMethod(method.simpleName) [
+				primarySourceElement = method.primarySourceElement
+				returnType = method.returnType
+				for (p : method.parameters) {
+					addParameter(p.simpleName, p.type)
+				}
+			]
+			interfaceAsyncType.addMethod(method.simpleName) [
+				primarySourceElement = method.primarySourceElement
+				for (p : method.parameters) {
+					addParameter(p.simpleName, p.type)
+				}
+				addParameter('result',
+					AsyncCallback.newTypeReference(
+						switch method.returnType {
+							case primitiveVoid: newTypeReference(Void)
+							case primitiveBoolean: newTypeReference(Boolean)
+							case primitiveInt: newTypeReference(Integer)
+							case primitiveLong: newTypeReference(Long)
+							case primitiveShort: newTypeReference(Short)
+							case primitiveDouble: newTypeReference(Double)
+							case primitiveFloat: newTypeReference(Float)
+							case primitiveByte: newTypeReference(Byte)
+							default: method.returnType
+						}))
+			]
 		}
 
-		extendedClass = typeof(RemoteServiceServlet).newTypeReference
+		extendedClass = RemoteServiceServlet.newTypeReference
 		implementedInterfaces = implementedInterfaces + #[interfaceType.newTypeReference]
 	}
 
