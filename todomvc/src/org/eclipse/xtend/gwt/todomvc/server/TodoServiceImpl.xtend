@@ -1,7 +1,7 @@
 package org.eclipse.xtend.gwt.todomvc.server
 
+import de.itemis.xtend.auto.gwt.GwtService
 import java.util.List
-import org.eclipse.xtend.gwt.GwtService
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 
 import static com.google.appengine.api.memcache.MemcacheServiceFactory.*

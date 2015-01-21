@@ -9,6 +9,7 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 
 import static extension org.eclipse.xtend.gwt.ui.UiBuilder.*
 import static com.google.gwt.event.dom.client.KeyCodes.*
+import com.google.gwt.user.client.ui.Button
 
 class TodoComposite extends Composite {
 
@@ -25,20 +26,20 @@ class TodoComposite extends Composite {
 		this.todo = todo
 		this.updateTodo = updateTodo
 		this.deleteTodo = deleteTodo
-		initWidget(createWidget())
-		updateView()
+		initWidget(createWidget)
+		updateView
 	}
 
 	def createWidget() {
 		li = htmlPanel('li') [
 			textBox = textBox [
 				styleName = 'edit'
-				onBlur [
+				addBlurHandler [
 					todo.title = textBox.value
 					viewMode
 					updateTodo.apply(todo)
 				]
-				onKeyPress [
+				addKeyPressHandler [
 					switch nativeEvent.keyCode {
 						case KEY_ENTER: {
 							todo.title = textBox.value
@@ -56,20 +57,20 @@ class TodoComposite extends Composite {
 				styleName = 'view'
 				checkBox = checkBox [
 					styleName = 'toggle'
-					onClick [
+					addClickHandler [
 						todo.done = !todo.done
 						updateView
 						updateTodo.apply(todo)
 					]
 				]
 				label = label [
-					onDoubleClick [
+					addDoubleClickHandler [
 						editMode
 					]
 				]
-				button [
+				add(new Button) [
 					styleName = 'destroy'
-					onClick [
+					addClickHandler [
 						deleteTodo.apply(todo)
 					]
 				]
