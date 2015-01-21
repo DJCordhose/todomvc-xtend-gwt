@@ -5,9 +5,9 @@ import com.google.gwt.event.dom.client.KeyCodes
 import com.google.gwt.user.client.DOM
 import com.google.gwt.user.client.Event
 import com.google.gwt.user.client.ui.Composite
+import de.itemis.xtend.auto.gwt.WithUiBinding
 import java.util.List
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
-import org.eclipse.xtend.gwt.ui.WithUiBinding
 
 @WithUiBinding class ToDoView extends Composite {
 

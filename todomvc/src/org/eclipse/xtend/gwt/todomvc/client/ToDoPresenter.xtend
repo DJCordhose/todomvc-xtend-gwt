@@ -15,7 +15,7 @@ import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
 class ToDoPresenter implements EntryPoint {
 	static val STORAGE_KEY = "TODO-USER"
 
-	extension TodoServiceAsync service = GWT.create(TodoService)
+	TodoServiceAsync service = GWT.create(TodoService)
 
 	List<Todo> todos = newArrayList
 	ToDoView view
@@ -24,38 +24,37 @@ class ToDoPresenter implements EntryPoint {
 	 * Gwt's main(String[])
 	 */
 	override onModuleLoad() {
-		RootPanel.get.add(
-			view = new ToDoView => [
-				onAddTodo [
-					// don't add a todo if todoText is empty
-					if (view.todoText == null)
-						return;
-					todos += new Todo => [
-						title = view.todoText
-					]
-					view.clearTodoText
-					updateTodoStatistics
+		view = new ToDoView => [
+			onAddTodo [
+				// don't add a todo if todoText is empty
+				if (view.todoText == null)
+					return;
+				todos += new Todo => [
+					title = view.todoText
 				]
-				onClearCompletedTodos [
-					todos = todos.filter[!done].toList
-					updateTodoStatistics
-				]
-				onDeleteTodo [
-					todos.remove(it)
-					updateTodoStatistics
-				]
-				onMarkAllCompleted [ isCompleted |
-					todos.forEach[done = isCompleted]
-					updateTodoStatistics
-				]
-				onUpdateTodo [
-					if (title.trim == "") {
-						todos.remove(it)
-					}
-					updateTodoStatistics
-				]
+				view.clearTodoText
+				updateTodoStatistics
 			]
-		)
+			onClearCompletedTodos [
+				todos = todos.filter[!done].toList
+				updateTodoStatistics
+			]
+			onDeleteTodo [
+				todos.remove(it)
+				updateTodoStatistics
+			]
+			onMarkAllCompleted [ isCompleted |
+				todos.forEach[done = isCompleted]
+				updateTodoStatistics
+			]
+			onUpdateTodo [
+				if (title.trim == "") {
+					todos.remove(it)
+				}
+				updateTodoStatistics
+			]
+		]
+		RootPanel.get.add(view)
 
 		// to initially display statistics without waiting for return of server call	
 		view.setTodoStatistics(0, 0)
@@ -78,7 +77,7 @@ class ToDoPresenter implements EntryPoint {
 		var completeTodos = todos.filter[done].size
 		view.setTodoStatistics(totalTodos, completeTodos)
 		view.updateView(todos)
-		todos.save(currentName, onSuccess [])
+		service.save(todos, currentName, onSuccess [])
 	}
 
 	private def getCurrentName() {
@@ -86,7 +85,7 @@ class ToDoPresenter implements EntryPoint {
 		val Storage storage = Storage.getLocalStorageIfSupported
 		if (storage != null) {
 			val storedName = storage.getItem(STORAGE_KEY);
-			if (storedName == null || storedName.equals("")) {
+			if (storedName.nullOrEmpty) {
 				storage.setItem(STORAGE_KEY, currentName)
 			} else {
 				currentName = storedName

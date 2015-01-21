@@ -12,23 +12,15 @@ import com.google.gwt.user.client.ui.TextBox
 import com.google.gwt.event.dom.client.KeyPressHandler
 import com.google.gwt.event.dom.client.ClickHandler
 import com.google.gwt.event.dom.client.DoubleClickHandler
+import com.google.gwt.user.client.ui.Widget
+import com.google.gwt.user.client.ui.HasWidgets
 
 class UiBuilder {
-	
-	def static onBlur(FocusWidget element, BlurHandler handler) {
-		element.addBlurHandler(handler)
-	}
-	
-	def static onKeyPress(FocusWidget element, KeyPressHandler handler) {
-		element.addKeyPressHandler(handler)
-	}
-	
-	def static onClick(FocusWidget element, ClickHandler handler) {
-		element.addClickHandler(handler)
-	}
-	
-	def static onDoubleClick(Label element, DoubleClickHandler handler) {
-		element.addDoubleClickHandler(handler)
+
+	def static <T extends Widget> T add(HasWidgets parent, T widget, (T)=>void init) {
+		parent.add(widget)
+		init.apply(widget) 
+		return widget
 	}
 	
 	def static checkBox(Panel parent, (CheckBox)=>void initializer) {
