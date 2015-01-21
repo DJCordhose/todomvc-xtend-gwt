@@ -7,9 +7,8 @@ import com.google.gwt.user.client.ui.Label
 import com.google.gwt.user.client.ui.TextBox
 import org.eclipse.xtend.gwt.todomvc.shared.Todo
 
-import static extension org.eclipse.xtend.gwt.ui.UiBuilder.*
 import static com.google.gwt.event.dom.client.KeyCodes.*
-import com.google.gwt.user.client.ui.Button
+import static extension de.itemis.xtend.auto.gwt.client.UiBuilder.*
 
 class TodoComposite extends Composite {
 
@@ -31,7 +30,7 @@ class TodoComposite extends Composite {
 	}
 
 	def createWidget() {
-		li = htmlPanel('li') [
+		li = li [
 			textBox = textBox [
 				styleName = 'edit'
 				addBlurHandler [
@@ -68,7 +67,7 @@ class TodoComposite extends Composite {
 						editMode
 					]
 				]
-				add(new Button) [
+				button [
 					styleName = 'destroy'
 					addClickHandler [
 						deleteTodo.apply(todo)
@@ -98,6 +97,12 @@ class TodoComposite extends Composite {
 		} else {
 			li.element.removeAttribute("class")
 		}
+	}
+	
+	protected def li((HTMLPanel)=>void initializer) {
+		val result = new HTMLPanel('li', "")
+		initializer.apply(result)
+		result
 	}
 
 }

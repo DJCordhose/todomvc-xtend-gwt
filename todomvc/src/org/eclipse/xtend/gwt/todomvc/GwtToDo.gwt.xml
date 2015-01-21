@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='gwttodo'>
   <inherits name='com.google.gwt.user.User'/>
-  <!-- Other module inherits                                      -->
-  <inherits name='org.eclipse.xtend.GwtLib'/>
+  
+  <!-- Other module inherits -->
+  <inherits name='de.itemis.xtend.auto.gwt.AutoGWT'/>
   
   <entry-point class='org.eclipse.xtend.gwt.todomvc.client.ToDoPresenter'/>
   <source path='client'/>
   <source path='shared'/>
+  <source path='lib'/>
   <set-property name="user.agent" value="gecko1_8,safari"/>
   <!-- 
   <add-linker name="xsiframe"/>
