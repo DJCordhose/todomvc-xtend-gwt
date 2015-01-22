@@ -1,4 +1,4 @@
-package org.eclipse.xtend.gwt
+package org.eclipse.xtend.gwt.todomvc.lib
 
 import com.google.gwt.user.client.rpc.AsyncCallback
 

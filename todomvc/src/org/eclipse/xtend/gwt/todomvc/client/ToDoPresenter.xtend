@@ -10,7 +10,7 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 import org.eclipse.xtend.gwt.todomvc.shared.TodoService
 import org.eclipse.xtend.gwt.todomvc.shared.TodoServiceAsync
 
-import static org.eclipse.xtend.gwt.AsyncCallbackExtensions.*
+import static org.eclipse.xtend.gwt.todomvc.lib.AsyncCallbackExtensions.*
 
 class ToDoPresenter implements EntryPoint {
 	static val STORAGE_KEY = "TODO-USER"
