@@ -7,7 +7,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>annotations</module>
 		<module>todomvc</module>
 	</modules>
 
