@@ -34,16 +34,16 @@ import org.eclipse.xtend.gwt.todomvc.shared.Todo
 		this.deleteTodo = deleteTodo
 	}
 
-	def onAddTodo((Void)=>void callback) {
+	def onAddTodo(()=>void callback) {
 		todoText.addKeyUpHandler [
 			if (nativeKeyCode == KeyCodes.KEY_ENTER)
-				callback.apply(null)
+				callback.apply()
 		]
 	}
 
-	def onClearCompletedTodos((Void)=>void callback) {
+	def onClearCompletedTodos(()=>void callback) {
 		clearCompleted.addClickHandler [
-			callback.apply(null)
+			callback.apply()
 		]
 	}
 
